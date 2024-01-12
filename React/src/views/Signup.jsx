@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { useRef } from 'react';
+import { useRef,useState } from 'react';
 import  {Link} from 'react-router-dom'
 import axiosClient from '../axios-client';
 import { useStateContext } from '../Context/ContextProvider';
@@ -12,6 +12,7 @@ export default function Signup() {
     const passwordConfirmationRef=useRef();
 
     const {setUser,setToken}=useStateContext();
+    const [errors,setErros]=useState(null);
 
 
     const onSubmit=(ev)=>{
@@ -30,10 +31,13 @@ export default function Signup() {
 
         })
         .catch(err=>{
+
             const response=err.response;
+
             if(response && response.status==422){
                 //validation error
-             console.log(response.data.errors);
+             //console.log(response.data.errors);
+             setErros(response.data.errors)
             }
 
         })
@@ -50,6 +54,15 @@ export default function Signup() {
     <h1 className="title">Create Your Account</h1>
 
     <form onSubmit={onSubmit}>
+
+    {errors &&
+    <div className='alert'>
+    {Object.keys(errors).map(key=>(
+        <p key={key}>{errors[key][0] }</p>
+    ))}
+
+    </div>}
+
     <input ref={nameRef} type="text" placeholder="Full Name" />
     <input ref={emailRef} type="email" placeholder="Email" />
     <input ref={passwordRef} type="password" placeholder="Password" />

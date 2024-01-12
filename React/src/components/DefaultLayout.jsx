@@ -1,10 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { Link, Navigate, Outlet } from "react-router-dom";
 import { useStateContext } from "../Context/ContextProvider";
+import { useEffect } from "react";
+import axiosClient from "../axios-client";
 
 export default function DefaultLayout() {
+    const {user,token,setUser,setToken}=useStateContext();
 
-    const {user,token}=useStateContext();
+    useEffect(()=>{
+        axiosClient.get("/user")
+        .then(({data})=>{
+            setUser(data)
+        })
+    },[]);
+
+
     if(!token){
         // to users
         return <Navigate to="/login"/>
@@ -12,6 +23,16 @@ export default function DefaultLayout() {
 
     const logout=(ev)=>{
         ev.preventDefault()
+        axiosClient.post('/logout')
+        .then(()=>{
+            setUser({});
+            setToken(null)
+
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+
 
     }
 

@@ -20,10 +20,15 @@ axiosClient.interceptors.response.use((response)=>{
     return response;
 
 }, (error)=>{
-    const {response}=error;
+    try {
+        const {response}=error;
     if (response.status==401){
         //token expired or incorrect
         localStorage.removeItem('ACCESS_TOKEN');
+    }
+
+    } catch (e) {
+        console.log(e);
     }
 
     throw error;
