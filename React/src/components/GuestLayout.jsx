@@ -8,7 +8,7 @@ export default function GuestLayout() {
     const {user,token}=useStateContext();
     if(token){
         //to uses page
-        return <Navigate to="/users" />
+        return <Navigate to="/dashboard" />
     }
 
   return (

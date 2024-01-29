@@ -55,4 +55,12 @@ class AuthController extends Controller
             'content' => ''
         ], 204);
     }
+
+    public function get_users($id){
+        $users=User::all();
+        return response()->json([
+            "success"=>true,
+            "users"=>$users
+        ],200);
+    }
 }
